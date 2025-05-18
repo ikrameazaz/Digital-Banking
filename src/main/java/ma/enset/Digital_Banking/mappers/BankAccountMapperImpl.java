@@ -2,10 +2,7 @@ package ma.enset.Digital_Banking.mappers;
 
 import ma.enset.Digital_Banking.dtos.*;
 import ma.enset.Digital_Banking.entities.*;
-import ma.enset.Digital_Banking.dtos.CustomerDTO;
-import ma.enset.Digital_Banking.entities.Customer;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 //MapStruct
 @Service

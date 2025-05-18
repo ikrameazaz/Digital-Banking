@@ -1,5 +1,10 @@
 package ma.enset.Digital_Banking.dtos;
 
-public class CreditDTO {
+import lombok.Data;
 
+@Data
+public class CreditDTO {
+    private String accountId;
+    private double amount;
+    private String description;
 }
