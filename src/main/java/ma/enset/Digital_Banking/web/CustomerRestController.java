@@ -1,5 +1,6 @@
 package ma.enset.Digital_Banking.web;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.enset.Digital_Banking.Exceptions.CustomerNotFoundException;
 import ma.enset.Digital_Banking.dtos.CustomerDTO;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customer")
+@AllArgsConstructor
 @Slf4j
 @CrossOrigin("*")
 public class CustomerRestController {
