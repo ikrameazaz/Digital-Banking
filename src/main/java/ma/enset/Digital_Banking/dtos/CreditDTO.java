@@ -1,5 +1,5 @@
 package ma.enset.Digital_Banking.dtos;
 
-public class CategoryDTO {
+public class CreditDTO {
 
 }
