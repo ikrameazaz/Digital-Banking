@@ -16,6 +16,6 @@ public class Customer {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer")
     private List<BankAccount> bankAccounts;
 }
