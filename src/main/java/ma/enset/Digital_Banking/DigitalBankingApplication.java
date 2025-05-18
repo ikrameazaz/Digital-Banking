@@ -1,9 +1,12 @@
 package ma.enset.Digital_Banking;
 
+import ma.enset.Digital_Banking.entities.AccountOperation;
 import ma.enset.Digital_Banking.entities.CurrentAccount;
 import ma.enset.Digital_Banking.entities.Customer;
 import ma.enset.Digital_Banking.entities.SavingAccount;
 import ma.enset.Digital_Banking.enums.AccountStatus;
+import ma.enset.Digital_Banking.enums.OperationType;
+import ma.enset.Digital_Banking.repositories.AccountOperationRepository;
 import ma.enset.Digital_Banking.repositories.BankAccountRepository;
 import ma.enset.Digital_Banking.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -23,7 +26,7 @@ public class DigitalBankingApplication {
 	}
 
 	@Bean
-	CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository) {
+	CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
 		return args -> {
 			// Create customers
 			Stream.of("Ikrame", "Safaa", "Zak").forEach(name -> {
@@ -55,6 +58,16 @@ public class DigitalBankingApplication {
 				savingAccount.setCustomer(customer);
 				savingAccount.setInterestRate(5.5);
 				bankAccountRepository.save(savingAccount);
+			});
+			bankAccountRepository.findAll().forEach(acc -> {
+				for (int i = 0; i < 10; i++) {
+					AccountOperation accountOperation = new AccountOperation();
+					accountOperation.setOperationDate(new Date());
+					accountOperation.setAmount(Math.random() * 12000);
+					accountOperation.setType(Math.random() > 0.5 ? OperationType.DEBIT : OperationType.CREDIT);
+					accountOperation.setBankAccount(acc);
+					accountOperationRepository.save(accountOperation);
+				}
 			});
 		};
 	}
