@@ -29,7 +29,7 @@ public class DigitalBankingApplication {
 	CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
 		return args -> {
 			// Create customers
-			Stream.of("lamiaa", "fedwa", "amine").forEach(name -> {
+			Stream.of("ikrame", "safaa", "zak").forEach(name -> {
 				Customer customer = new Customer();
 				customer.setName(name);
 				customer.setEmail(name.toLowerCase() + "@gmail.com");
