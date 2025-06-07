@@ -29,7 +29,6 @@ public class BankAccountRestAPI{
     public List<AccountOperationDTO> getHistory(@PathVariable String accountId){
         return bankAccountService.accountHistory(accountId);
     }
-
     @GetMapping("/accounts/{accountId}/pageOperations")
     public AccountHistoryDTO getAccountHistory(
             @PathVariable String accountId,
