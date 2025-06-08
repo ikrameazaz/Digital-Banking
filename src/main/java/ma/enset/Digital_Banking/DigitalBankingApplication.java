@@ -26,46 +26,48 @@ public class DigitalBankingApplication {
 	}
 
 	@Bean
-	CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
+	CommandLineRunner run(CustomerRepository customerRepository,
+						  BankAccountRepository bankAccountRepository,
+						  AccountOperationRepository accountOperationRepository) {
 		return args -> {
-			// Create customers
-			Stream.of("salima", "joudia", "lili").forEach(name -> {
+			Stream.of("Ikrame", "fatima", "karima").forEach(name -> {
 				Customer customer = new Customer();
 				customer.setName(name);
-				customer.setEmail(name.toLowerCase() + "@gmail.com");
+				customer.setEmail(name + "@gmail.com");
 				customerRepository.save(customer);
 			});
 
-			// Create a Current Account for each customer
 			customerRepository.findAll().forEach(customer -> {
+				// Compte courant
 				CurrentAccount currentAccount = new CurrentAccount();
 				currentAccount.setId(UUID.randomUUID().toString());
-				currentAccount.setBalance(Math.random() * 10000);
+				currentAccount.setBalance(Math.random() * 90000);
 				currentAccount.setCreatedAt(new Date());
-				currentAccount.setStatus(AccountStatus.CREATED);
+				currentAccount.setStatus(AccountStatus.ACTIVATED);
+				currentAccount.setOverDraft(10000);
 				currentAccount.setCustomer(customer);
-				currentAccount.setOverDraft(9000);
 				bankAccountRepository.save(currentAccount);
-			});
 
-			// Create a Saving Account for each customer
-			customerRepository.findAll().forEach(customer -> {
+				// Compte épargne
 				SavingAccount savingAccount = new SavingAccount();
 				savingAccount.setId(UUID.randomUUID().toString());
-				savingAccount.setBalance(Math.random() * 10000);
+				savingAccount.setBalance(Math.random() * 90000);
 				savingAccount.setCreatedAt(new Date());
-				savingAccount.setStatus(AccountStatus.CREATED);
+				savingAccount.setStatus(AccountStatus.ACTIVATED);
+				savingAccount.setInterestRate(1.2);
 				savingAccount.setCustomer(customer);
-				savingAccount.setInterestRate(5.5);
 				bankAccountRepository.save(savingAccount);
 			});
-			bankAccountRepository.findAll().forEach(acc -> {
+
+			// Ajout d'opérations bancaires à tous les comptes
+			bankAccountRepository.findAll().forEach(bankAccount -> {
 				for (int i = 0; i < 10; i++) {
 					AccountOperation accountOperation = new AccountOperation();
-					accountOperation.setOperationDate(new Date());
-					accountOperation.setAmount(Math.random() * 12000);
 					accountOperation.setType(Math.random() > 0.5 ? OperationType.DEBIT : OperationType.CREDIT);
-					accountOperation.setBankAccount(acc);
+					accountOperation.setOperationDate(new Date());
+					accountOperation.setAmount(Math.random() * 1000);
+					accountOperation.setDescription("Operation description");
+					accountOperation.setBankAccount(bankAccount);
 					accountOperationRepository.save(accountOperation);
 				}
 			});

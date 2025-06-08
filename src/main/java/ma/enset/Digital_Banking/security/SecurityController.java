@@ -1,6 +1,6 @@
 package ma.enset.Digital_Banking.security;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,39 +10,44 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin("*")
 public class SecurityController {
-    private JwtEncoder jwtEncoder;
+
     private final AuthenticationManager authenticationManager;
+    private final JwtEncoder jwtEncoder;
 
     @GetMapping("/profile")
-    public Authentication authenticate(Authentication authentication) {
+    public Authentication profile(Authentication authentication) {
         return authentication;
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(String username, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        Instant instant = Instant.now();
-        String authorities  = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
-        JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
+    public Map<String, String> login(@RequestParam String username, @RequestParam String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
+
+        Instant now = Instant.now();
+        String scope = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(username)
-                .issuedAt(instant)
-                .expiresAt(instant.plusSeconds(3600))
-                .claim("authorities", authorities)
+                .issuedAt(now)
+                .expiresAt(now.plus(30, ChronoUnit.MINUTES))
+                .claim("scope", scope)
                 .build();
-        JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(
-                JwsHeader.with(MacAlgorithm.HS512).build(),
-                jwtClaimsSet
-        );
-        Jwt jwt = jwtEncoder.encode(jwtEncoderParameters);
+
+        Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(
+                JwsHeader.with(MacAlgorithm.HS512).build(), claims));
+
         return Map.of("access-token", jwt.getTokenValue());
     }
-
 }

@@ -19,6 +19,7 @@ public class AccountOperation {
     private double amount;
     @Enumerated(EnumType.STRING)
     private OperationType type;
+    private String description;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private BankAccount bankAccount;
