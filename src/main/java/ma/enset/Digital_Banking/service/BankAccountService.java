@@ -4,6 +4,7 @@ import ma.enset.Digital_Banking.Exceptions.BalanceNotSufficientException;
 import ma.enset.Digital_Banking.Exceptions.BankAccountNotFoundException;
 import ma.enset.Digital_Banking.Exceptions.CustomerNotFoundException;
 import ma.enset.Digital_Banking.dtos.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public interface BankAccountService {
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
     List<CustomerDTO> searchCustomers(String keyword);
+
+    Page<CustomerDTO> getCustomersPage(int page, int size);
 }
 
 
