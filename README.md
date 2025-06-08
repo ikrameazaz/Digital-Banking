@@ -121,7 +121,6 @@ src/main/java/ma/enset/Digital_Banking/
 
 ![Diagramme de Classes](docs/images/diag.png)
 
-> **📁 Pour ajouter l'image :** Sauvegardez votre diagramme de classes dans le dossier `docs/images/` avec le nom `class-diagram.png`
 
 #### **Architecture du Modèle**
 Le diagramme illustre une architecture orientée objet avec :
