@@ -117,45 +117,68 @@ src/main/java/ma/enset/Digital_Banking/
 
 ## 🗄️ Modèle de Données
 
-### Diagramme de Classes Simplifié
+### Diagramme de Classes UML
 
-```mermaid
-erDiagram
-    Customer ||--o{ BankAccount : owns
-    BankAccount ||--o{ AccountOperation : has
-    
-    Customer {
-        Long id PK
-        String name
-        String email
-    }
-    
-    BankAccount {
-        String id PK
-        double balance
-        Date createdAt
-        AccountStatus status
-        Long customer_id FK
-        String type
-    }
-    
-    CurrentAccount {
-        double overDraft
-    }
-    
-    SavingAccount {
-        double interestRate
-    }
-    
-    AccountOperation {
-        Long id PK
-        Date operationDate
-        double amount
-        OperationType type
-        String description
-        String bankAccount_id FK
-    }
 ```
+                    ┌─────────────────┐
+                    │   Customer      │
+                    ├─────────────────┤
+                    │ □ id : String   │
+                    │ □ name : String │
+                    │ □ email : String│
+                    └─────────┬───────┘
+                              │ owns
+                              │ 1
+                              ▼ 0..*
+                    ┌─────────────────────────┐
+                    │     BankAccount         │
+                    ├─────────────────────────┤
+                    │ □ id : String           │
+                    │ □ createdAt : Date      │
+                    │ □ balance : double      │
+                    │ □ status : AccountStatus│
+                    │ □ currency : String     │
+                    └─────────┬───────────────┘
+                              │ 1
+                              │ has
+                              ▼ 0..*
+                    ┌─────────────────────────┐
+                    │      Operation          │
+                    ├─────────────────────────┤
+                    │ □ id : Long             │
+                    │ □ date : Date           │
+                    │ □ amount : double       │
+                    │ □ type : OperationType  │
+                    └─────────────────────────┘
+
+        ┌─────────────────────┐              ┌─────────────────────┐
+        │   CurrentAccount    │              │   SavingAccount     │
+        ├─────────────────────┤              ├─────────────────────┤
+        │ □ overDraft : double│              │ □ interestRate :    │
+        └─────────────────────┘              │   double            │
+                                             └─────────────────────┘
+                    ▲                                    ▲
+                    └────────────┬───────────────────────┘
+                                 │ (inheritance)
+                    ┌─────────────────────────┐
+                    │     BankAccount         │
+                    └─────────────────────────┘
+
+┌─────────────────┐              ┌─────────────────┐
+│  AccountStatus  │              │  OperationType  │
+├─────────────────┤              ├─────────────────┤
+│ CREATED         │              │ CREDIT          │
+│ ACTIVATED       │              │ DEBIT           │
+│ SUSPENDED       │              └─────────────────┘
+└─────────────────┘
+```
+
+#### **Architecture du Modèle**
+Le diagramme illustre une architecture orientée objet avec :
+
+- **Héritage** : CurrentAccount et SavingAccount héritent de BankAccount
+- **Composition** : Customer possède des BankAccount, BankAccount contient des Operations
+- **Énumérations** : AccountStatus et OperationType pour typer les données
 
 ### Relations
 - **Customer** ↔ **BankAccount** : One-to-Many (Un client peut avoir plusieurs comptes)
