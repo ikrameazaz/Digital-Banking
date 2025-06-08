@@ -119,66 +119,28 @@ src/main/java/ma/enset/Digital_Banking/
 
 ### Diagramme de Classes UML
 
-```
-                    ┌─────────────────┐
-                    │   Customer      │
-                    ├─────────────────┤
-                    │ □ id : String   │
-                    │ □ name : String │
-                    │ □ email : String│
-                    └─────────┬───────┘
-                              │ owns
-                              │ 1
-                              ▼ 0..*
-                    ┌─────────────────────────┐
-                    │     BankAccount         │
-                    ├─────────────────────────┤
-                    │ □ id : String           │
-                    │ □ createdAt : Date      │
-                    │ □ balance : double      │
-                    │ □ status : AccountStatus│
-                    │ □ currency : String     │
-                    └─────────┬───────────────┘
-                              │ 1
-                              │ has
-                              ▼ 0..*
-                    ┌─────────────────────────┐
-                    │      Operation          │
-                    ├─────────────────────────┤
-                    │ □ id : Long             │
-                    │ □ date : Date           │
-                    │ □ amount : double       │
-                    │ □ type : OperationType  │
-                    └─────────────────────────┘
+![Diagramme de Classes](docs/images/diag.png)
 
-        ┌─────────────────────┐              ┌─────────────────────┐
-        │   CurrentAccount    │              │   SavingAccount     │
-        ├─────────────────────┤              ├─────────────────────┤
-        │ □ overDraft : double│              │ □ interestRate :    │
-        └─────────────────────┘              │   double            │
-                                             └─────────────────────┘
-                    ▲                                    ▲
-                    └────────────┬───────────────────────┘
-                                 │ (inheritance)
-                    ┌─────────────────────────┐
-                    │     BankAccount         │
-                    └─────────────────────────┘
-
-┌─────────────────┐              ┌─────────────────┐
-│  AccountStatus  │              │  OperationType  │
-├─────────────────┤              ├─────────────────┤
-│ CREATED         │              │ CREDIT          │
-│ ACTIVATED       │              │ DEBIT           │
-│ SUSPENDED       │              └─────────────────┘
-└─────────────────┘
-```
+> **📁 Pour ajouter l'image :** Sauvegardez votre diagramme de classes dans le dossier `docs/images/` avec le nom `class-diagram.png`
 
 #### **Architecture du Modèle**
 Le diagramme illustre une architecture orientée objet avec :
 
+**🏗️ Entités Principales :**
+- **Customer** : Client de la banque (id, name, email)
+- **BankAccount** : Classe abstraite pour les comptes (id, createdAt, balance, status, currency)
+- **CurrentAccount** : Compte courant avec découvert autorisé
+- **SavingAccount** : Compte épargne avec taux d'intérêt
+- **Operation** : Opérations bancaires (id, date, amount, type)
+
+**🔗 Relations :**
+- **Customer → BankAccount** : One-to-Many (1 client peut avoir plusieurs comptes)
+- **BankAccount → Operation** : One-to-Many (1 compte peut avoir plusieurs opérations)
 - **Héritage** : CurrentAccount et SavingAccount héritent de BankAccount
-- **Composition** : Customer possède des BankAccount, BankAccount contient des Operations
-- **Énumérations** : AccountStatus et OperationType pour typer les données
+
+**📋 Énumérations :**
+- **AccountStatus** : CREATED, ACTIVATED, SUSPENDED
+- **OperationType** : CREDIT, DEBIT
 
 ### Relations
 - **Customer** ↔ **BankAccount** : One-to-Many (Un client peut avoir plusieurs comptes)

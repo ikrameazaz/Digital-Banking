@@ -35,6 +35,7 @@ public interface BankAccountService {
     List<CustomerDTO> searchCustomers(String keyword);
 
     Page<CustomerDTO> getCustomersPage(int page, int size);
+
 }
 
 
